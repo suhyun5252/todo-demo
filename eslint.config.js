@@ -37,7 +37,7 @@ export default [
       ...reactHooks.configs.recommended.rules, // React Hooks 권장 규칙
       "react/jsx-no-target-blank": "off", // target="_blank" 관련 규칙 비활성화
       "react-refresh/only-export-components": [
-        "warn",
+        "off",
         { allowConstantExport: true },
       ], // React Fast Refresh 규칙
       "prettier/prettier": "warn", // Prettier 규칙 (포매팅 오류를 에러로 표시)

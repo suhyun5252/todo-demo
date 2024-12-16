@@ -1,56 +1,53 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import About from "./pages/About";
+import Join from "./pages/member/Join";
 import TodoIndex from "./pages/todo/Index";
 import TodoDetail from "./pages/todo/TodoDetail";
 import TodoEdit from "./pages/todo/TodoEdit";
 import TodoAdd from "./pages/todo/TodoAdd";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
-import { TODO_MOCK_DATA } from "./constants/mockdata";
-import { useState } from "react";
-
-// 내일 LocalStrage 와 React Context 로 알면 된다.
-let originData = [...TODO_MOCK_DATA];
-// 수정이 일어나는 곳에 props로 전달한다.
+import { TodoProvider } from "./contexts/TodoContext";
+import { LoginProvider } from "./contexts/LoginContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import LoginPage from "./pages/member/LoginPage";
+import Schedule from "./pages/calendar/Schedule";
+import RangeSchedule from "./pages/calendar/RangeSchedule";
+import Full from "./pages/calendar/Full";
 
 function App() {
-  const [countId, setCountId] = useState(originData.length + 1);
-  const [todoList, setTodoList] = useState(originData);
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<About />} />
-          <Route path="todo">
-            <Route
-              index
-              element={
-                <TodoIndex todoList={todoList} setTodoList={setTodoList} />
-              }
-            />
-            <Route
-              path="add"
-              element={
-                <TodoAdd
-                  todoList={todoList}
-                  setTodoList={setTodoList}
-                  countId={countId}
-                  setCountId={setCountId}
-                />
-              }
-            />
-            <Route path="detail" element={<TodoDetail todoList={todoList} />} />
-            <Route
-              path="edit/:id"
-              element={
-                <TodoEdit todoList={todoList} setTodoList={setTodoList} />
-              }
-            />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <LoginProvider>
+      <ThemeProvider>
+        <TodoProvider>
+          <BrowserRouter>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<About />} />
+                {/* 회원가입 */}
+                <Route path="/member" element={<Join />} />
+                {/* 로그인 */}
+                <Route path="/login" element={<LoginPage />} />
+                {/* 스케줄 */}
+                <Route path="/schedule" element={<Schedule />} />
+                {/* 일정 */}
+                <Route path="/range" element={<RangeSchedule />} />
+                {/* Full calender 일정 */}
+                <Route path="/full" element={<Full />} />
+
+                <Route path="todo">
+                  <Route index element={<TodoIndex />} />
+                  <Route path="add" element={<TodoAdd />} />
+                  <Route path="detail" element={<TodoDetail />} />
+                  <Route path="edit/:id" element={<TodoEdit />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          </BrowserRouter>
+        </TodoProvider>
+      </ThemeProvider>
+    </LoginProvider>
   );
 }
 export default App;

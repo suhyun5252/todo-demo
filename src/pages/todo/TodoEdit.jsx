@@ -1,32 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { TodoContext } from "../../contexts/TodoContext";
 // import { TODO_MOCK_DATA } from "../../constants/mockdata";
 
-function TodoEdit({ todoList, setTodoList }) {
+function TodoEdit() {
+  const { todoList, updateTodo } = useContext(TodoContext);
   //  useState 로 화면 리랜더링
 
   const [formData, setFormData] = useState({});
   //  Params 로 id를 추출하세요.
   const { id } = useParams();
-  // console.log(id);
   const navigate = useNavigate();
 
   const getTodo = () => {
     // id를 이용해서 mockdata에서 필요로 한 내용 추출
     const findData = todoList.filter(item => item.id === parseInt(id));
-    // console.log(findData);
     const findTodo = findData[0];
     console.log(findTodo);
     setFormData({ ...findTodo });
-    // console.log(findTodo);
-    // setTodo에 담고
     // 화면에 리랜더링 출력
-    // console.log("리랜더", id);
   };
 
   const handleChange = e => {
     const { value, name, type, checked } = e.target;
-    // console.log(name, value);
 
     setFormData({
       ...formData,
@@ -34,38 +30,9 @@ function TodoEdit({ todoList, setTodoList }) {
     });
   };
 
-  const postTodo = () => {
-    // console.log("formData", formData);
-    // const originData = [...todoList];
-
-    const newTodoData = todoList.map(item => {
-      if (formData.id === item.id) {
-        return formData;
-      } else {
-        return item;
-      }
-    });
-    console.log("수정된 할일들", newTodoData);
-    setTodoList(newTodoData);
-  };
-
-  // forEach로 넣기
-  // const postTodo = () => {
-  //   console.log("formData", formData);
-  //   const originData = [...TODO_MOCK_DATA];
-  //   const newTodoData = [];
-  //   originData.forEach(item => {
-  //     if (formData.id === item.id) {
-  //       newTodoData.push(formData);
-  //     } else {
-  //       newTodoData.push(item);
-  //     }
-  //   });
-  //   console.log("수정된 할일들", newTodoData);
-  // };
   const handleSubmit = e => {
     e.preventDefault();
-    postTodo();
+    updateTodo(formData);
     alert("내용이 수정되었습니다.");
     navigate(`/todo/detail?id=${formData.id}`);
   };

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TodoContext } from "../../contexts/TodoContext";
 // import { TODO_MOCK_DATA } from "../../constants/mockdata";
 const initData = {
   id: 0,
@@ -11,7 +12,8 @@ const initData = {
   privacy: 0,
 };
 // TodoEdit 에서 복붙해서 사용
-function TodoAdd({ todoList, setTodoList, countId, setCountId }) {
+function TodoAdd() {
+  const { addTodo } = useContext(TodoContext);
   //  useState 로 화면 리랜더링
   const [formData, setFormData] = useState(initData);
   //  Params 로 id를 추출하세요.
@@ -28,19 +30,9 @@ function TodoAdd({ todoList, setTodoList, countId, setCountId }) {
     });
   };
 
-  const postTodo = () => {
-    console.log("formData", formData);
-    // const originData = [...todoList];
-
-    console.log("formData", { ...formData, id: countId });
-    const newTodoData = [...todoList, { ...formData, id: countId }];
-    setTodoList(newTodoData);
-    setCountId(++countId);
-  };
-
   const handleSubmit = e => {
     e.preventDefault();
-    postTodo();
+    addTodo(formData);
     alert("내용이 추가되었습니다.");
     navigate(`/todo`);
   };
